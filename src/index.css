@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+.input{
+    @apply border border-gray-300 bg-gray-50 rounded-sm shadow-sm px-5 py-3 space-y-10 mb-4;
+}
