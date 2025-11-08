@@ -1,4 +1,5 @@
 // import { useState } from "react";
+// import { useNavigate } from "react-router-dom"
 import Button from "../ui/Button"
 
 function Login_Form() {
@@ -6,6 +7,10 @@ function Login_Form() {
   // const [isLoading,setIsLoading] = useState(false);
 
 //  if(!isLoading) return 
+
+//  const navigate = useNavigate();
+   
+ 
 
   return (
 
@@ -68,6 +73,18 @@ function Login_Form() {
             </div>
 
             <Button type="submit">Sign in</Button>
+            <button className="w-full bg-white text-black py-0 rounded-md justify-center items-center gap-2 hover:bg-gray-500 transition cursor-pointer">
+             <img
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                alt="Google"
+                className="w-5 h-5"
+              />
+              sign in with google 
+            </button>
+
+            <button className="w-full bg-white text-black py-2 rounded-md hover:bg-yellow-500 transition cursor-pointer">
+              Guest mode</button>
+
         </form>
       </div>
      </div>

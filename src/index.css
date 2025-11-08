@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
 .input{
-    @apply border border-gray-300 bg-gray-50 rounded-sm shadow-sm px-5 py-3 space-y-10 mb-4;
+    @apply text-center bg-[#f4a226]  font-monotone
+    uppercase
+    font-normal
+    py-6
+    mb-10
+   
+    text-4xl            
+    sm:text-6xl         
+    md:text-7xl         
+    lg:text-[8rem]      
+
+    tracking-[-2px]
+    [word-spacing:6px] 
+    sm:[word-spacing:14px]
+    lg:[word-spacing:30px];
 }
