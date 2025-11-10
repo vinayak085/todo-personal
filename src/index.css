@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-.input{
+/* .input{
     @apply text-center bg-[#f4a226]  font-monotone
     uppercase
     font-normal
@@ -16,4 +16,4 @@
     [word-spacing:6px] 
     sm:[word-spacing:14px]
     lg:[word-spacing:30px];
-}
+} */
