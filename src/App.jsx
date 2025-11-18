@@ -5,6 +5,7 @@ import MainTodoList from './features/online/MainTodoList'
 import Register from './features/login/register'
 import ProtectedRoute from './pages/ProtectedRoute'
 import { Toaster } from 'react-hot-toast'
+import PageNotFound from './pages/PageNotFound'
 
 function App() {
   return (
@@ -20,7 +21,10 @@ function App() {
       </ProtectedRoute>
       }/>
     <Route path='/register' element={<Register />}/>
-    <Route path='/guest' element={<OfflineTodo/>}/>    
+    <Route path='/guest' element={<OfflineTodo/>}/>  
+    
+    <Route path='*' element={<PageNotFound/>}/>  
+    
     </Routes>
     </BrowserRouter>
       </>
