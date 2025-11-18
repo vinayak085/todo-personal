@@ -1,17 +1,29 @@
-import React from 'react'
-import Login_Form from './features/Login_Form'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import TodoList from './features/TodoList'
+import OfflineTodo from './pages/OfflineTodo'
+import Login from './pages/Login'
+import MainTodoList from './features/online/MainTodoList'
+import Register from './features/login/register'
+import ProtectedRoute from './pages/ProtectedRoute'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
+  <>
+    <Toaster position="top-center" reverseOrder={false}/>
     <BrowserRouter>
     <Routes>
-         
-    <Route path='login' element={<Login_Form />}/>
-    <Route path='/' element={<TodoList />}/>    
+    
+    <Route path='/' element={<Login />}/>
+    <Route path='/main' element={
+      <ProtectedRoute>
+        <MainTodoList />
+      </ProtectedRoute>
+      }/>
+    <Route path='/register' element={<Register />}/>
+    <Route path='/guest' element={<OfflineTodo/>}/>    
     </Routes>
     </BrowserRouter>
+      </>
   )
 }
 

@@ -1,5 +1,4 @@
 import { useState } from "react"
-import Button from "../ui/Button";
 import { useLocaleStorage } from "../hooks/useLocaleStorage";
 
 function TodoList() {  
@@ -50,7 +49,14 @@ function onhandletoggleitems(id){
  const percentage = total === 0 ? 0 : Math.round((completedCount / total) * 100);
 
   return (
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//*whole todo list css and thier functionality is above
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     <>
+    {/* Navbar and their css  */}
+
     <div>
      <h1 className="text-center
     bg-[#f4a226]
@@ -70,8 +76,10 @@ function onhandletoggleitems(id){
     sm:[word-spacing:14px]
     lg:[word-spacing:30px]"> Offline TODO</h1> 
         
-          <form onSubmit={onhandleSubmit}>
 
+       {/* Form whenever user click this the todo will going to submit and shows in the "ui"    */}
+
+          <form onSubmit={onhandleSubmit}>
          <div className="flex items-center gap-3 w-full max-w-xl mx-auto mt-10 px-4">
             <input placeholder="Type what you want to do" value={description} onChange={(e)=>setDescription(e.target.value)}
             className="w-100 border border-gray-300 rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
@@ -84,10 +92,14 @@ function onhandletoggleitems(id){
               </button>
             </div>
             </form>
-               
-            <ul className="max-w-xl py-10 mx-auto mt-20 font-bold flex flex-wrap gap-10 px-4">
+
+
+            {/* //* This part is comes whenever the form is submitted and all the css of above part   */}
+
+            <ul className=" list-none w-4/5 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5 justify-center content-start mt-20">
              {todos.map((todo)=>
-             <li key={todo.id}>
+             <li key={todo.id}
+             >
               <input type="checkbox" 
               checked={todo.completed}
               onChange={()=>onhandletoggleitems(todo.id)}/>
@@ -97,11 +109,15 @@ function onhandletoggleitems(id){
             )}
             </ul>
 
-            <h1 className="mt-40 mx-10 font-bold p-20 bg-amber-400 text-white">your success {percentage}% </h1>
+
+            {/* //* It shows logic above todo and their statastics */}
+            
+            <div className="mt-90 mx-10 font-bold py-[3.2rem] bg-amber-400 text-center">
+            <h1> {percentage === 0 ? `make your todo now ${percentage}` : percentage < 50 ? `you are not done yet ${percentage}`: percentage < 100 ? `you are almost there ${percentage}` : `completed successfully ${percentage}`} %</h1>
+            </div>
         </div>
         </>
   )
 }
-
 
 export default TodoList

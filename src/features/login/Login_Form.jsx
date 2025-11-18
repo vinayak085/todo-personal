@@ -1,16 +1,25 @@
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom"
-import Button from "../ui/Button"
+import { useState } from "react"
+import Button from "../../ui/Button"
+import { useLogin } from "./useLogin"
+import { Link } from "react-router-dom"
 
 function Login_Form() {
 
-  // const [isLoading,setIsLoading] = useState(false);
+const [email,setEmail] = useState("")
+const [password,setPassword] = useState('')   
+const {isLoading,login} = useLogin();
 
-//  if(!isLoading) return 
+function handleSubmit(e){
+ e.preventDefault();
+ if(!email || !password) return;
 
-//  const navigate = useNavigate();
-   
- 
+ login({email,password},{
+  onSettled:()=>{
+    setEmail(''),
+    setPassword('')
+  }
+ })
+}
 
   return (
 
@@ -53,12 +62,15 @@ function Login_Form() {
         <h2 className="text-2xl font-semibold text-gray-900">Welcome Back</h2>
         <p className="text-gray-500 mb-6">Please enter your detail</p>
 
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email Address
             </label>
             <input type="email"
+            required="please enter your email"
+            value={email}
+            onChange={(e)=>setEmail(e.target.value)}
             className="w-full border border-gray-300 rounded-b-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
             />
             </div>
@@ -68,24 +80,37 @@ function Login_Form() {
               Password
             </label>
             <input type="password"
+            required="password"
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
             className="w-full border border-gray-300 rounded-b-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"
             />
             </div>
 
-            <Button type="submit">Sign in</Button>
-            <button className="w-full bg-white text-black py-0 rounded-md justify-center items-center gap-2 hover:bg-gray-500 transition cursor-pointer">
-             <img
-                src="https://www.svgrepo.com/show/475656/google-color.svg"
-                alt="Google"
-                className="w-5 h-5"
-              />
-              sign in with google 
-            </button>
+            <Button 
+            className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition"
+            type="submit" disabled={isLoading}>
 
-            <button className="w-full bg-white text-black py-2 rounded-md hover:bg-yellow-500 transition cursor-pointer">
+              {isLoading ? "signing in" : "Signin"}</Button>
+             
+              <p className="text-sm text-blue-500">
+                Don't have an account?
+                  <Link
+                  to="/register"
+                  className="text-blue-700 font-semibold hover:underline ml-1"
+                  >
+                  Register
+                  </Link>
+
+              </p>
+             <Link
+             to='/guest'
+             >
+            <button className="w-full bg-white text-black py-2 rounded-md hover:bg-yellow-500 transition cursor-pointer" >
               Guest mode</button>
+             </Link>
+            </form>
 
-        </form>
       </div>
      </div>
     </div>
