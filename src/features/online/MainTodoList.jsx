@@ -1,16 +1,23 @@
-import { useState } from "react";
-import { HiArrowRightOnRectangle, HiTrash } from "react-icons/hi2";
+import { useRef, useState } from "react";
+import { HiArrowRightOnRectangle, HiPaperClip, HiTrash } from "react-icons/hi2";
 import { useAddTodo } from "./useAddTodo";
 import { useDeleteTodo } from "./useDeleteTodo";
 import { useToggleTodo } from "./useToggleTodo";
 import { useLogout } from "../login/useLogout";
 import { useTodo } from "./useTodo";
+import image from "../images/image.png";
+ 
+import Spinner from "../../ui/Spinner";
 
 // import { useTodos } from "./useTodos";
 function MainTodoList() {
 
   const [search,setSearch] = useState("")
-  const [filter,setFilter] = useState("all")   
+  const [filter,setFilter] = useState("all")  
+  
+  const [imagefile,setImageFile] = useState(null)
+  const [imagePreview,setImagepreview] = useState(null)
+
 
    const {todo:todos = [] , isLoading} = useTodo({search,filter})
   //  const {todos=[],isLoading} = useTodos()
@@ -20,7 +27,15 @@ function MainTodoList() {
    const {isDeleting,deletetodo} = useDeleteTodo();
    const {logout,isLoading:isLoggingout} = useLogout();
      
-    const [description,setDescription] = useState("") 
+    const [description,setDescription] = useState("")
+
+    const fileInputRef = useRef(null)
+
+    function handleFileChange(e){
+        const file = e.target.files[0];
+        setImageFile(file)
+        setImagepreview(file ? URL.createObjectURL(file):null);
+    }
     
     function onhandleSubmit(e){
         
@@ -29,16 +44,26 @@ function MainTodoList() {
         if(!clean.trim()) return;
         
         addtodo(
-          {description:clean,completed:false},
+          // {description:clean,completed:false},
           {
-            onSuccess:()=>setDescription("")
+            description: clean,
+            image: imagefile,
+            completed: false,
+            id: null        
+        },
+          {
+            onSuccess:()=>{
+              setDescription("")
+              setImageFile(null)
+              setImagepreview(null)
+            }
           }
         )
     
     }
     
 
-   if (isLoading) return <p>Loading...</p>;
+  if(isLoading||isAdding||isDeleting||isToggling) return <Spinner/>;
 
 const completedCount = todos.filter((t)=>t.completed).length;
 const total = todos.length;
@@ -121,6 +146,19 @@ return (
         focus:outline-none focus:ring-4 focus:ring-amber-300 shadow-sm 
         placeholder:text-gray-400 transition-all duration-200"
       />
+      <HiPaperClip
+      size={30}
+      className="cursor-pointer"
+      onClick={()=>fileInputRef.current.click()}
+      />
+       {imagePreview && (
+        <img
+        src={imagePreview}
+        alt="preview"
+        className="w-12 h-12 object-cover rounded-xl shadow-md border sm:mt-0 mt-2"
+        />
+      )}
+
       <button
         type="submit"
         disabled={isAdding}
@@ -130,6 +168,19 @@ return (
         {isAdding ? "Adding" : "Add"}
       </button>
     </div>
+
+    {/* image upload section */}
+
+     <div className="flex flex-col gap-3 items-center w-full">
+      <input
+      type="file"
+      accept="image/*"
+      ref={fileInputRef}
+      onChange={handleFileChange}
+      className="hidden"
+      />
+      
+     </div>
   </form>
 
   {/* Todo List */}
@@ -141,29 +192,36 @@ return (
         key={todo.id}
         className="flex items-center justify-between bg-white rounded-xl shadow-md px-5 py-4 hover:shadow-lg transition-shadow duration-200"
       >
-        <div className="flex items-center gap-3">
+        <div className="flex w-full gap-3">
           <input
             type="checkbox"
             checked={todo.completed}
             disabled={isToggling}
             onChange={() => toggletodo(todo)}
-            className="w-5 h-5 accent-amber-400 cursor-pointer"
+            className="w-5 h-5 mt-1 accent-amber-400 cursor-pointer"
           />
+
+          <div className="flex flex-col">
           <span
             className={`text-lg ${
               todo.completed ? "line-through text-gray-400" : "text-gray-800"
-            } transition-colors`}
-          >
-            {todo.description}
+            } transition-colors break-words`}
+            >
+            {todo.description === "allah" && <img src={image}/> || todo.description}
+            </span>
+            {todo.image && 
+            <img src={typeof todo.image === "string" ? todo.image : URL.createObjectURL(todo.image)}
+            className="w-full max-w-[120px] h-20 object-cover rounded-lg border mt-2"
+            />
+          }
            
-          </span>
+          </div>
         </div>
-
 
         <button
           disabled={isDeleting}
           onClick={() => deletetodo(todo.id)}
-          className="text-red-500 hover:text-red-600 text-xl cursor-pointer transition-transform hover:scale-110"
+          className="text-red-500 hover:text-red-600 text-xl cursor-pointer transition-transform hover:scale-110 mt-1 ml-3"
         >
           <HiTrash />
         </button>
@@ -172,7 +230,7 @@ return (
   </ul>
 
   {/* Statistics */}
-  <div className="mt-20 mx-auto w-fit bg-gradient-to-r from-yellow-400 to-amber-500 text-white font-bold py-6 px-10 rounded-full shadow-lg text-center text-xl">
+  <div className="mt-20 mx-auto w-fit bg-gradient-to-r  from-yellow-400 to-amber-500 text-white font-bold py-6 px-10 rounded-full shadow-lg text-center text-xl">
     <h1>
       {percentage === 0
         ? `Make your todo now (${percentage}%)`
@@ -184,7 +242,7 @@ return (
     </h1>
   </div>
 </div>
-         </>
+   </>
    )
 }
 
